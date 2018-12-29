@@ -1,0 +1,30 @@
+.row
+  .col-xs-12
+    .panel.panel-primary
+      .panel-heading
+        span = t('.withdraw', sn: @pandacoin.id)
+      .panel-body
+        = description_for :withdraw do
+          = item_for @pandacoin, :id
+          = item_for @pandacoin, :created_at
+          = item_for @pandacoin, :aasm_state_text
+          hr.split
+          = item_for @pandacoin.member, :name
+          = item_for @pandacoin, :fund_extra
+          = item_for @pandacoin, :fund_uid do
+            span = @pandacoin.fund_uid.truncate(22)
+          = item_for @pandacoin, :amount
+          hr.split
+          = item_for @pandacoin, :remark
+          hr.split
+          ul.list-inline.pull-right
+            - if @pandacoin.may_reject?
+              li
+                = link_to t('.reject'), url_for([:admin, @pandacoin]), class: 'btn btn-danger', method: 'DELETE', confirm: t('.reject_confirm')
+            - if @pandacoin.may_process?
+              li
+                = link_to t('.process'), url_for([:admin, @pandacoin]), class: 'btn btn-primary', method: 'PATCH'
+
+  .col-xs-12
+    = render partial: 'shared/admin/member', locals: {member: @pandacoin.member}
+    = render partial: 'shared/admin/account', locals: {account: @pandacoin.account}
